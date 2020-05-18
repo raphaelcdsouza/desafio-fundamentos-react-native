@@ -94,13 +94,13 @@ const CartProvider: React.FC = ({ children }) => {
         item => item.id === id,
       );
 
-      if (
-        itemAlreadyAddedIndex === -1 ||
-        newProductsArray[itemAlreadyAddedIndex].quantity === 1
-      )
-        return;
+      if (itemAlreadyAddedIndex === -1) return;
 
-      newProductsArray[itemAlreadyAddedIndex].quantity -= 1;
+      if (newProductsArray[itemAlreadyAddedIndex].quantity > 1) {
+        newProductsArray[itemAlreadyAddedIndex].quantity -= 1;
+      } else {
+        newProductsArray.splice(itemAlreadyAddedIndex, 1);
+      }
 
       AsyncStorage.setItem(
         '@GoMarketplace:products',
