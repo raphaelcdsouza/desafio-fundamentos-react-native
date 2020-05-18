@@ -75,9 +75,24 @@ const CartProvider: React.FC = ({ children }) => {
     [products, increment],
   );
 
-  const decrement = useCallback(async id => {
-    // TODO DECREMENTS A PRODUCT QUANTITY IN THE CART
-  }, []);
+  const decrement = useCallback(
+    async id => {
+      const newProductsArray = [...products];
+
+      const itemAlreadyAddedIndex = newProductsArray.findIndex(
+        item => item.id === id,
+      );
+
+      if (itemAlreadyAddedIndex >= 0) {
+        if (newProductsArray[itemAlreadyAddedIndex].quantity <= 1) return;
+
+        newProductsArray[itemAlreadyAddedIndex].quantity -= 1;
+
+        setProducts(newProductsArray);
+      }
+    },
+    [products],
+  );
 
   const value = React.useMemo(
     () => ({ addToCart, increment, decrement, products }),
